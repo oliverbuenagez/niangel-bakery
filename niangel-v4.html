@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panadería NIANGEL</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="header-top">
+        <div class="logo">
+          <div class="logo-i">🍞</div>
+          <div>
+            <h1>NIANGEL</h1>
+            <p>Control de Panaderia</p>
+          </div>
+        </div>
+        <div id="sync-status">
+          <div id="sync-dot"></div>
+          <span id="sync-txt">Conectando...</span>
+        </div>
+      </div>
+      <nav>
+        <button class="nav-btn active" onclick="irTab('ingredientes', this)">
+          <span class="ni">📦</span>Ingredientes
+        </button>
+        <button class="nav-btn" onclick="irTab('recetas', this)">
+          <span class="ni">📋</span>Recetas
+        </button>
+        <button class="nav-btn" onclick="irTab('produccion', this)">
+          <span class="ni">🍞</span>Produccion
+        </button>
+        <button class="nav-btn" onclick="irTab('historial', this)">
+          <span class="ni">📅</span>Historial
+        </button>
+        <button class="nav-btn" onclick="irTab('estadisticas', this)">
+          <span class="ni">📊</span>Estadisticas
+        </button>
+        <button class="nav-btn" onclick="irTab('clientes', this)">
+          <span class="ni">👥</span>Clientes
+        </button>
+      </nav>
+    </header>
+    <main>
+      <div id="tab-ingredientes" class="seccion activa">
+        <div class="pag-h">
+          <h2>📦 Ingredientes</h2>
+          <p>Tu bodega — precios aplicados a todas las recetas</p>
+        </div>
+        <div class="dos-col">
+          <div>
+            <div class="card">
+              <div class="ct">Nuevo ingrediente</div>
+              <div class="campo">
+                <label>Nombre</label
+                ><input
+                  type="text"
+                  id="ing-nom"
+                  placeholder="Harina, Azucar, Huevos..."
+                />
+              </div>
+              <div class="fila">
+                <div class="campo">
+                  <label>Cantidad</label
+                  ><input
+                    type="number"
+                    id="ing-cant"
+                    placeholder="50"
+                    min="0"
+                    step="any"
+                  />
+                </div>
+                <div class="campo">
+                  <label>Unidad</label
+                  ><input
+                    type="text"
+                    id="ing-uni"
+                    placeholder="kg, libras, ml..."
+                  />
+                </div>
+              </div>
+              <div class="campo">
+                <label>Precio ($)</label
+                ><input
+                  type="number"
+                  id="ing-pre"
+                  placeholder="0.00"
+                  step="0.01"
+                  min="0"
+                />
+              </div>
+              <button class="btn btn-o" onclick="agregarIng()">
+                + Agregar ingrediente
+              </button>
+            </div>
+          </div>
+          <div>
+            <div class="card">
+              <div class="ct">
+                Mi Bodega <span class="badge" id="ing-cnt">0</span>
+              </div>
+              <div id="ing-lista">
+                <div class="loading">
+                  <div class="spinner"></div>
+                  <p>Cargando...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-recetas" class="seccion">
+        <div class="pag-h">
+          <h2>📋 Tipos de Pan</h2>
+          <p>Recetas con ingredientes y costos automaticos</p>
+        </div>
+        <div class="dos-col">
+          <div>
+            <div class="card">
+              <div class="ct">Nueva receta</div>
+              <div class="campo">
+                <label>Nombre del pan</label
+                ><input
+                  type="text"
+                  id="rec-nom"
+                  placeholder="Pan de Queso, Croissant..."
+                />
+              </div>
+              <div class="campo">
+                <label>¿Cuántos panes rinde esta receta?</label
+                ><input
+                  type="number"
+                  id="rec-rinde"
+                  placeholder="Ej: 15"
+                  min="1"
+                  step="1"
+                />
+              </div>
+              <button class="btn btn-o" onclick="crearRec()">
+                Crear receta
+              </button>
+            </div>
+          </div>
+          <div>
+            <div class="card">
+              <div class="ct">
+                Mis Recetas <span class="badge" id="rec-cnt">0</span>
+              </div>
+              <div id="rec-lista">
+                <div class="loading">
+                  <div class="spinner"></div>
+                  <p>Cargando...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-produccion" class="seccion">
+        <div class="pag-h">
+          <h2>🍞 Produccion del Dia</h2>
+          <p>Se guarda automaticamente en la nube</p>
+        </div>
+        <div class="dos-col">
+          <div>
+            <div class="card">
+              <div class="ct">Que pan hiciste hoy?</div>
+              <div class="campo">
+                <label>Tipo de pan</label>
+                <div class="sw">
+                  <select id="prod-rec" onchange="verIngRec()">
+                    <option value="">Selecciona un pan</option>
+                  </select>
+                </div>
+              </div>
+              <div class="campo">
+                <label>Panes a producir</label
+                ><input
+                  type="number"
+                  id="prod-pan"
+                  placeholder="Ej: 300"
+                  min="1"
+                  oninput="verIngRec()"
+                />
+              </div>
+              <div class="campo">
+                <label>Precio de venta por pan ($)</label
+                ><input
+                  type="number"
+                  id="prod-pre"
+                  placeholder="0.00"
+                  step="0.01"
+                  min="0"
+                />
+              </div>
+              <button class="btn btn-d" onclick="calcularProd()">
+                Calcular y guardar
+              </button>
+            </div>
+          </div>
+          <div>
+            <div class="card">
+              <div class="ct">Ingredientes de la receta</div>
+              <div id="prod-det">
+                <div class="vacio">
+                  <div class="ei">👆</div>
+                  <p>Selecciona un pan.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="prod-res" style="display: none"></div>
+      </div>
+
+      <div id="tab-historial" class="seccion">
+        <div class="pag-h">
+          <h2>📅 Historial</h2>
+          <p>Registro de todas tus producciones</p>
+        </div>
+        <div class="hf">
+          <button class="fb ac" onclick="filtrarH('hoy', this)">Hoy</button>
+          <button class="fb" onclick="filtrarH('semana', this)">
+            Esta semana
+          </button>
+          <button class="fb" onclick="filtrarH('mes', this)">Este mes</button>
+          <button class="fb" onclick="filtrarH('todo', this)">Todo</button>
+        </div>
+        <div id="hist-rt"></div>
+        <div id="hist-lista">
+          <div class="loading">
+            <div class="spinner"></div>
+            <p>Cargando...</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-estadisticas" class="seccion">
+        <div class="pag-h">
+          <h2>📊 Estadisticas</h2>
+          <p>Analisis de tu negocio</p>
+        </div>
+        <div id="stats-con">
+          <div class="vacio">
+            <div class="ei">📊</div>
+            <p>Necesitas al menos una produccion para ver estadisticas.</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-clientes" class="seccion">
+        <div class="pag-h">
+          <h2>👥 Clientes</h2>
+          <p>Tiendas, restaurantes y clientes frecuentes</p>
+        </div>
+        <div class="dos-col">
+          <div>
+            <div class="card">
+              <div class="ct">Nuevo cliente</div>
+              <div class="campo">
+                <label>Nombre</label
+                ><input
+                  type="text"
+                  id="cli-nom"
+                  placeholder="Tienda Don Jose..."
+                />
+              </div>
+              <div class="campo">
+                <label>Tipo</label>
+                <div class="sw">
+                  <select id="cli-tip">
+                    <option value="tienda">Tienda</option>
+                    <option value="restaurante">Restaurante</option>
+                    <option value="vecino">Vecino</option>
+                    <option value="otro">Otro</option>
+                  </select>
+                </div>
+              </div>
+              <div class="campo">
+                <label>Telefono (opcional)</label
+                ><input
+                  type="text"
+                  id="cli-tel"
+                  placeholder="+1 000 000 0000"
+                />
+              </div>
+              <button class="btn btn-o" onclick="agregarCli()">
+                + Agregar cliente
+              </button>
+            </div>
+          </div>
+          <div>
+            <div class="card">
+              <div class="ct">
+                Mis Clientes <span class="badge" id="cli-cnt">0</span>
+              </div>
+              <div id="cli-lista">
+                <div class="loading">
+                  <div class="spinner"></div>
+                  <p>Cargando...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <div id="toast"></div>
+    <script type="module" src="programa.js"></script>
+  </body>
+</html>
