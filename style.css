@@ -48,7 +48,7 @@
   --morado: #7c3aed;
   --morado-l: #f3effe;
   --texto: #1c1009;
-  --texto-s: #7a6248;
+  --texto-s: #6b5340;
   --borde: rgba(196, 146, 90, 0.18);
   --borde-f: rgba(196, 146, 90, 0.4);
   --sombra: 0 1px 12px rgba(13, 10, 7, 0.07);
@@ -77,13 +77,13 @@ html {
 
 body {
   font-family: "Inter", sans-serif;
-  background: var(--crema);
+  background: #e8d9c4;
   color: var(--texto);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   -webkit-font-smoothing: antialiased;
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.5;
 }
 
@@ -286,12 +286,12 @@ nav::-webkit-scrollbar {
    6. CARDS
 ───────────────────────────────────────────────── */
 .card {
-  background: var(--blanco);
+  background: #ffffff;
   border-radius: var(--r-xl);
   padding: 18px;
   margin-bottom: 14px;
-  box-shadow: var(--sombra);
-  border: 1px solid var(--borde);
+  box-shadow: 0 3px 18px rgba(13, 10, 7, 0.11);
+  border: 1.5px solid rgba(139, 94, 60, 0.18);
   position: relative;
   overflow: hidden;
 }
@@ -301,10 +301,10 @@ nav::-webkit-scrollbar {
   position: absolute;
   top: 0;
   left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--dorado), transparent);
-  opacity: 0.4;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, var(--dorado), var(--dorado-b));
+  border-radius: 3px 0 0 3px;
 }
 
 .card-titulo {
@@ -336,12 +336,12 @@ nav::-webkit-scrollbar {
 
 .campo label {
   display: block;
-  font-size: 0.68rem;
-  font-weight: 600;
-  color: var(--cafe-mid);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--cafe-rico);
   text-transform: uppercase;
   letter-spacing: 0.8px;
-  margin-bottom: 4px;
+  margin-bottom: 5px;
 }
 
 .campo-label {
@@ -363,7 +363,7 @@ select {
   font-family: "Inter", sans-serif;
   font-size: 0.9rem;
   color: var(--texto);
-  background: var(--crema);
+  background: #e8d9c4;
   transition:
     border var(--trans),
     box-shadow var(--trans),
@@ -417,7 +417,7 @@ input[type="date"] {
   align-items: flex-end;
   margin-bottom: 8px;
   padding: 9px 11px;
-  background: var(--crema);
+  background: #e8d9c4;
   border-radius: var(--r-md);
   border: 1px solid var(--borde);
   animation: subir 0.18s ease;
@@ -448,7 +448,7 @@ input[type="date"] {
 
 .vta-total-wrap strong {
   font-family: "DM Serif Display", serif;
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   color: var(--dorado-b);
 }
 
@@ -554,7 +554,7 @@ input[type="date"] {
   align-items: center;
   justify-content: space-between;
   padding: 10px 12px;
-  background: var(--crema);
+  background: #e8d9c4;
   border-radius: var(--r-md);
   border: 1px solid var(--borde);
   animation: subir 0.18s ease;
@@ -587,7 +587,7 @@ input[type="date"] {
   align-items: center;
   gap: 10px;
   padding: 10px 12px;
-  background: var(--crema);
+  background: #e8d9c4;
   border-radius: var(--r-md);
   border: 1px solid var(--borde);
   margin-bottom: 6px;
@@ -616,8 +616,8 @@ input[type="date"] {
   flex: 1;
 }
 .ranking-nom {
-  font-weight: 600;
-  font-size: 0.87rem;
+  font-weight: 700;
+  font-size: 0.93rem;
   color: var(--cafe-rico);
 }
 .ranking-det {
@@ -664,7 +664,7 @@ input[type="date"] {
   align-items: center;
   justify-content: space-between;
   padding: 12px 15px;
-  background: var(--crema);
+  background: #e8d9c4;
   cursor: pointer;
   border-bottom: 1px solid transparent;
   transition: background var(--trans);
@@ -807,7 +807,7 @@ input[type="date"] {
 
 .hist-pan {
   font-family: "DM Serif Display", serif;
-  font-size: 0.95rem;
+  font-size: 1.02rem;
   color: var(--cafe-rico);
   font-weight: 600;
   margin-top: 1px;
@@ -845,8 +845,8 @@ input[type="date"] {
   border-radius: var(--r-lg);
   padding: 16px 12px;
   text-align: center;
-  border: 1px solid var(--borde);
-  background: var(--blanco);
+  border: 1.5px solid rgba(139, 94, 60, 0.2);
+  background: #ffffff;
   position: relative;
   overflow: hidden;
 }
@@ -884,15 +884,17 @@ input[type="date"] {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.7px;
-  color: var(--texto-s);
+  color: var(--cafe);
 }
 
 .stat-valor {
   font-family: "DM Serif Display", serif;
-  font-size: 1.45rem;
+  font-size: 1.7rem;
   color: var(--cafe-rico);
-  margin-top: 3px;
-  font-weight: 700;
+  margin-top: 4px;
+  font-weight: 400;
+  letter-spacing: -0.3px;
+  line-height: 1.1;
 }
 
 .sc-verde .stat-valor {
@@ -952,7 +954,7 @@ input[type="date"] {
 }
 .cliente-header:hover,
 .cliente-header.abierto {
-  background: var(--crema);
+  background: #e8d9c4;
 }
 .cliente-header.abierto {
   border-bottom: 1px solid var(--borde);
@@ -979,8 +981,8 @@ input[type="date"] {
 }
 
 .cliente-nombre {
-  font-weight: 600;
-  font-size: 0.9rem;
+  font-weight: 700;
+  font-size: 1rem;
   color: var(--cafe-rico);
   white-space: nowrap;
   overflow: hidden;
@@ -1032,7 +1034,7 @@ input[type="date"] {
 }
 
 .cli-mini-stat {
-  background: var(--crema);
+  background: #e8d9c4;
   border-radius: var(--r-md);
   padding: 7px 6px;
   text-align: center;
@@ -1092,7 +1094,7 @@ input[type="date"] {
   align-items: flex-start;
   justify-content: space-between;
   padding: 8px 10px;
-  background: var(--crema);
+  background: #e8d9c4;
   border-radius: var(--r-md);
   border: 1px solid var(--borde);
   margin-bottom: 6px;
@@ -1130,7 +1132,7 @@ input[type="date"] {
   align-items: center;
   justify-content: space-between;
   padding: 8px 11px;
-  background: var(--crema);
+  background: #e8d9c4;
   border-radius: var(--r-md);
   border: 1px solid var(--borde);
   margin-bottom: 6px;
@@ -1173,8 +1175,8 @@ input[type="date"] {
 }
 
 .hv-cli {
-  font-weight: 600;
-  font-size: 0.87rem;
+  font-weight: 700;
+  font-size: 0.92rem;
   color: var(--cafe-rico);
 }
 .hv-fecha {
@@ -1207,7 +1209,7 @@ input[type="date"] {
 }
 
 .hv-res-card {
-  background: var(--crema);
+  background: #e8d9c4;
   border-radius: var(--r-md);
   padding: 9px 8px;
   text-align: center;
@@ -1242,7 +1244,7 @@ input[type="date"] {
 
 .panel-tabs {
   display: flex;
-  background: var(--crema);
+  background: #e8d9c4;
   border-bottom: 1px solid var(--borde);
   overflow-x: auto;
   scrollbar-width: none;
@@ -1492,7 +1494,7 @@ input[type="date"] {
 .tabla .fila-total td {
   border-bottom: none;
   font-weight: 700;
-  background: var(--crema);
+  background: #e8d9c4;
 }
 
 .nota-sec {
