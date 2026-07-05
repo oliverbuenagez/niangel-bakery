@@ -1,0 +1,983 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panadería NIANGEL</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- ══════════════════════════════════════
+     PANTALLA DE LOGIN PIN
+══════════════════════════════════════ -->
+    <div id="login-screen">
+      <div id="login-card">
+        <div id="login-logo">🍞</div>
+        <h1 id="login-titulo">NIANGEL</h1>
+        <p id="login-subtitulo">Control de Panadería</p>
+
+        <div id="login-puntos">
+          <span class="punto" id="p0"></span>
+          <span class="punto" id="p1"></span>
+          <span class="punto" id="p2"></span>
+          <span class="punto" id="p3"></span>
+        </div>
+
+        <p id="login-mensaje">Ingresa tu PIN de 4 dígitos</p>
+
+        <div id="login-teclado">
+          <button class="tecla" onclick="presionarTecla('1')">1</button>
+          <button class="tecla" onclick="presionarTecla('2')">2</button>
+          <button class="tecla" onclick="presionarTecla('3')">3</button>
+          <button class="tecla" onclick="presionarTecla('4')">4</button>
+          <button class="tecla" onclick="presionarTecla('5')">5</button>
+          <button class="tecla" onclick="presionarTecla('6')">6</button>
+          <button class="tecla" onclick="presionarTecla('7')">7</button>
+          <button class="tecla" onclick="presionarTecla('8')">8</button>
+          <button class="tecla" onclick="presionarTecla('9')">9</button>
+          <button class="tecla tecla-vacia"></button>
+          <button class="tecla" onclick="presionarTecla('0')">0</button>
+          <button class="tecla tecla-borrar" onclick="borrarTecla()">⌫</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+     APP PRINCIPAL
+══════════════════════════════════════ -->
+    <header>
+      <div class="header-top">
+        <div class="logo">
+          <div class="logo-icono">🍞</div>
+          <div>
+            <h1>NIANGEL</h1>
+            <p>Control de Panadería</p>
+          </div>
+        </div>
+        <div id="sync-status">
+          <div id="sync-dot"></div>
+          <span id="sync-txt">Conectando...</span>
+        </div>
+      </div>
+      <nav>
+        <button class="nav-btn active" onclick="irTab('ingredientes', this)">
+          <span class="nav-icono">📦</span>Ingredientes
+        </button>
+        <button class="nav-btn" onclick="irTab('recetas', this)">
+          <span class="nav-icono">📋</span>Recetas
+        </button>
+        <button class="nav-btn" onclick="irTab('produccion', this)">
+          <span class="nav-icono">🍞</span>Producción
+        </button>
+        <button class="nav-btn" onclick="irTab('historial', this)">
+          <span class="nav-icono">📅</span>Historial
+        </button>
+        <button class="nav-btn" onclick="irTab('estadisticas', this)">
+          <span class="nav-icono">📊</span>Estadísticas
+        </button>
+        <button class="nav-btn" onclick="irTab('clientes', this)">
+          <span class="nav-icono">👥</span>Clientes
+        </button>
+        <button class="nav-btn" onclick="irTab('descargas', this)">
+          <span class="nav-icono">📥</span>
+          <div>Descargas</div>
+        </button>
+      </nav>
+    </header>
+
+    <main>
+      <!-- ══ INGREDIENTES ══ -->
+      <section class="seccion activa" id="tab-ingredientes">
+        <div class="pag-header">
+          <h2>📦 Ingredientes</h2>
+          <p>
+            Tu bodega — precios aplicados automáticamente a todas las recetas
+          </p>
+        </div>
+        <div class="dos-col">
+          <div class="card">
+            <div class="card-titulo">Nuevo ingrediente</div>
+            <div class="campo">
+              <label>Nombre</label>
+              <input
+                type="text"
+                id="ing-nom"
+                placeholder="Ej: Harina de trigo"
+              />
+            </div>
+            <div class="fila">
+              <div class="campo">
+                <label>Cantidad</label>
+                <input
+                  type="number"
+                  id="ing-cant"
+                  placeholder="1000"
+                  step="any"
+                  min="0"
+                />
+              </div>
+              <div class="campo">
+                <label>Unidad</label>
+                <input type="text" id="ing-uni" placeholder="g, kg, ml…" />
+              </div>
+            </div>
+            <div class="campo">
+              <label>Precio ($)</label>
+              <input
+                type="number"
+                id="ing-pre"
+                placeholder="0.00"
+                step="0.01"
+                min="0"
+              />
+            </div>
+            <button class="btn btn-dorado" onclick="agregarIng()">
+              + Agregar ingrediente
+            </button>
+          </div>
+          <div class="card">
+            <div class="card-titulo">
+              Mi Bodega <span class="badge" id="ing-cnt">0</span>
+            </div>
+            <div id="ing-lista">
+              <div class="cargando">
+                <div class="spinner"></div>
+                <p>Cargando...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══ RECETAS ══ -->
+      <section class="seccion" id="tab-recetas">
+        <div class="pag-header">
+          <h2>📋 Tipos de Pan</h2>
+          <p>Recetas con ingredientes y costos automáticos</p>
+        </div>
+        <div class="dos-col">
+          <div class="card">
+            <div class="card-titulo">Nueva receta</div>
+            <div class="campo">
+              <label>Nombre del pan</label>
+              <input type="text" id="rec-nom" placeholder="Ej: Pandeyuca" />
+            </div>
+            <div class="campo">
+              <label>¿Cuántos panes rinde esta receta?</label>
+              <input
+                type="number"
+                id="rec-rinde"
+                placeholder="12"
+                min="1"
+                step="1"
+              />
+            </div>
+            <div class="campo">
+              <label>Precio de venta por pan ($)</label>
+              <input
+                type="number"
+                id="rec-precio"
+                placeholder="0.00"
+                step="0.01"
+                min="0"
+              />
+            </div>
+            <button class="btn btn-dorado" onclick="crearRec()">
+              Crear receta
+            </button>
+          </div>
+          <div class="card">
+            <div class="card-titulo">
+              Mis Recetas <span class="badge" id="rec-cnt">0</span>
+            </div>
+            <div id="rec-lista">
+              <div class="cargando">
+                <div class="spinner"></div>
+                <p>Cargando...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══ PRODUCCIÓN ══ -->
+      <section class="seccion" id="tab-produccion">
+        <div class="pag-header">
+          <h2>🍞 Producción del Día</h2>
+          <p>Se guarda automáticamente en la nube</p>
+        </div>
+        <div class="dos-col">
+          <div class="card">
+            <div class="card-titulo">¿Qué pan hiciste hoy?</div>
+            <div class="campo">
+              <label>Fecha de producción</label>
+              <input type="date" id="prod-fecha" />
+            </div>
+            <div class="campo">
+              <label>Tipo de pan</label>
+              <div class="select-wrap">
+                <select id="prod-rec" onchange="verIngRec()">
+                  <option value="">Selecciona un pan</option>
+                </select>
+              </div>
+            </div>
+            <div class="campo">
+              <label>Panes a producir</label>
+              <input
+                type="number"
+                id="prod-pan"
+                placeholder="0"
+                min="1"
+                oninput="verIngRec()"
+              />
+            </div>
+            <div class="campo">
+              <label>Precio de venta por pan ($)</label>
+              <input
+                type="number"
+                id="prod-pre"
+                placeholder="0.00"
+                step="0.01"
+                min="0"
+              />
+            </div>
+            <button class="btn btn-dorado" onclick="calcularProd()">
+              Calcular y guardar
+            </button>
+          </div>
+          <div class="card">
+            <div class="card-titulo">Ingredientes de la receta</div>
+            <div id="prod-det">
+              <div class="vacio">
+                <div class="vacio-icono">👆</div>
+                <p>Selecciona un pan para ver sus ingredientes.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="prod-res" style="display: none; margin-top: 14px"></div>
+      </section>
+
+      <!-- ══ HISTORIAL ══ -->
+      <section class="seccion" id="tab-historial">
+        <div class="pag-header">
+          <h2>📅 Historial de Producción</h2>
+          <p>Análisis completo de tu producción por periodo</p>
+        </div>
+
+        <!-- BLOQUE 1: Filtros -->
+        <div class="filtros" id="hist-filtros">
+          <button class="filtro-btn activo" onclick="filtrarH('hoy', this)">
+            Hoy
+          </button>
+          <button class="filtro-btn" onclick="filtrarH('semana', this)">
+            Esta semana
+          </button>
+          <button class="filtro-btn" onclick="filtrarH('mes', this)">
+            Este mes
+          </button>
+          <button class="filtro-btn" onclick="filtrarH('todo', this)">
+            Todo
+          </button>
+          <div class="select-wrap" style="min-width: 155px">
+            <select id="hist-mes-sel" onchange="filtrarHMes(this.value)">
+              <option value="">📅 Mes específico</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- BLOQUE 2: Tarjetas de resumen grandes -->
+        <div id="hist-tarjetas"></div>
+
+        <!-- BLOQUE 3: Comparativa con periodo anterior -->
+        <div id="hist-comparativa"></div>
+
+        <!-- BLOQUE 4: Gráfica de barras -->
+        <div id="hist-grafica"></div>
+
+        <!-- BLOQUE 5: Indicadores inteligentes -->
+        <div id="hist-indicadores"></div>
+
+        <!-- BLOQUE 6: Desglose por tipo de pan -->
+        <div id="hist-panes"></div>
+
+        <!-- BLOQUE 7: Registros agrupados por día -->
+        <div id="hist-lista">
+          <div class="cargando">
+            <div class="spinner"></div>
+            <p>Cargando...</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══ ESTADÍSTICAS ══ -->
+      <section class="seccion" id="tab-estadisticas">
+        <div class="pag-header">
+          <h2>📊 Estadísticas</h2>
+          <p>Análisis completo de tu negocio</p>
+        </div>
+
+        <!-- BLOQUE 1: Filtros completos -->
+        <div class="filtros" id="stats-filtros">
+          <button class="filtro-btn" onclick="filtrarStats('hoy', this)">
+            Hoy
+          </button>
+          <button class="filtro-btn" onclick="filtrarStats('semana', this)">
+            Semana
+          </button>
+          <button class="filtro-btn" onclick="filtrarStats('mes', this)">
+            Mes
+          </button>
+          <button class="filtro-btn" onclick="filtrarStats('anio', this)">
+            Año
+          </button>
+          <button
+            class="filtro-btn activo"
+            onclick="filtrarStats('todo', this)"
+          >
+            Todo
+          </button>
+          <div class="select-wrap" style="min-width: 155px">
+            <select id="stats-mes-sel" onchange="filtrarStatsMes(this.value)">
+              <option value="">📅 Mes específico</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Contenedor principal — todo se dibuja aquí -->
+        <div id="stats-resumen"></div>
+        <div id="stats-grafica"></div>
+        <div id="stats-panes"></div>
+        <div id="stats-clientes"></div>
+        <div id="stats-tipos"></div>
+
+        <div id="stats-con">
+          <div class="vacio">
+            <div class="vacio-icono">📊</div>
+            <p>Necesitas al menos una producción para ver estadísticas.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══ CLIENTES ══ -->
+      <section class="seccion" id="tab-clientes">
+        <div class="pag-header-row">
+          <div class="pag-header" style="margin-bottom: 0">
+            <h2>👥 Clientes</h2>
+            <p>Historial de compras y análisis</p>
+          </div>
+          <button
+            class="btn btn-dorado btn-nuevo-cli"
+            onclick="abrirModalNuevoCli()"
+          >
+            + Nuevo cliente
+          </button>
+        </div>
+
+        <!-- Alerta inactivos -->
+        <div class="alerta-banda" id="cli-alerta-banda" style="display: none">
+          <span class="alerta-banda-ico">🔔</span>
+          <span id="cli-alerta-texto"></span>
+        </div>
+
+        <!-- Resumen -->
+        <div class="stats-grid" style="margin-bottom: 16px">
+          <div class="stat-card sc-cafe">
+            <div class="stat-label">Clientes</div>
+            <div class="stat-valor" id="cli-cnt2">0</div>
+          </div>
+          <div class="stat-card sc-azul">
+            <div class="stat-label">Ventas hoy</div>
+            <div class="stat-valor" id="cli-ventas-hoy">0</div>
+          </div>
+          <div class="stat-card sc-verde">
+            <div class="stat-label">Este mes</div>
+            <div class="stat-valor" id="cli-mes-tot">$0</div>
+          </div>
+        </div>
+
+        <!-- Búsqueda -->
+        <div class="campo" style="margin-bottom: 12px">
+          <input
+            type="text"
+            placeholder="🔍 Buscar cliente por nombre..."
+            oninput="buscarCli(this.value)"
+          />
+        </div>
+
+        <div class="dos-col">
+          <!-- Lista de clientes -->
+          <div>
+            <div
+              class="card-titulo"
+              style="
+                margin-bottom: 10px;
+                font-family: &quot;DM Serif Display&quot;, serif;
+                font-size: 1rem;
+                color: var(--cafe-rico);
+              "
+            >
+              Mis Clientes <span class="badge" id="cli-cnt">0</span>
+            </div>
+            <div id="cli-lista">
+              <div class="cargando">
+                <div class="spinner"></div>
+                <p>Cargando...</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel derecho: venta / historial / rankings -->
+          <div>
+            <div class="card panel-tabs-card">
+              <div class="panel-tabs">
+                <button
+                  class="panel-tab activo"
+                  onclick="verPanelTab('venta', this)"
+                >
+                  💰 Registrar venta
+                </button>
+                <button
+                  class="panel-tab"
+                  onclick="verPanelTab('historial', this)"
+                >
+                  📋 Historial
+                </button>
+                <button
+                  class="panel-tab"
+                  onclick="verPanelTab('ranking', this)"
+                >
+                  🏆 Rankings
+                </button>
+              </div>
+
+              <!-- Tab Venta -->
+              <div class="panel-tab-body" id="panel-venta">
+                <div class="campo">
+                  <label>Cliente</label>
+                  <div class="select-wrap">
+                    <select id="vta-cli">
+                      <option value="">Selecciona cliente</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="campo">
+                  <label>Fecha de compra</label>
+                  <input type="date" id="vta-fecha" />
+                </div>
+                <p class="nota-sec">Panes</p>
+                <div id="vta-filas"></div>
+                <button
+                  class="btn btn-gris"
+                  style="margin-bottom: 11px"
+                  onclick="agregarFilaVenta()"
+                >
+                  + Agregar otro pan
+                </button>
+                <div class="vta-total-wrap">
+                  <span>Total:</span>
+                  <strong id="vta-total-display">$0.00</strong>
+                </div>
+                <div class="campo">
+                  <label>Nota (opcional)</label>
+                  <input
+                    type="text"
+                    id="vta-nota"
+                    placeholder="Ej: pagó con Nequi"
+                  />
+                </div>
+                <button class="btn btn-dorado" onclick="registrarVenta()">
+                  💰 Guardar venta
+                </button>
+              </div>
+
+              <!-- Tab Historial -->
+              <div
+                class="panel-tab-body"
+                id="panel-historial"
+                style="display: none"
+              >
+                <div class="filtros filtros-compactos">
+                  <button
+                    class="filtro-btn activo"
+                    onclick="filtrarHistVentas('hoy', this)"
+                  >
+                    Hoy
+                  </button>
+                  <button
+                    class="filtro-btn"
+                    onclick="filtrarHistVentas('semana', this)"
+                  >
+                    Semana
+                  </button>
+                  <button
+                    class="filtro-btn"
+                    onclick="filtrarHistVentas('mes', this)"
+                  >
+                    Mes
+                  </button>
+                  <button
+                    class="filtro-btn"
+                    onclick="filtrarHistVentas('todo', this)"
+                  >
+                    Todo
+                  </button>
+                  <div class="select-wrap" style="min-width: 145px">
+                    <select
+                      id="hv-mes-sel"
+                      onchange="filtrarHistVentasMes(this.value)"
+                    >
+                      <option value="">📅 Mes específico</option>
+                    </select>
+                  </div>
+                </div>
+                <div id="hv-resumen"></div>
+                <div id="hv-lista">
+                  <div class="vacio">
+                    <div class="vacio-icono">🛍️</div>
+                    <p>No hay ventas registradas aún.</p>
+                  </div>
+                </div>
+                <button
+                  class="btn btn-gris"
+                  style="margin-top: 10px"
+                  onclick="exportarCSV()"
+                >
+                  📥 Exportar CSV
+                </button>
+              </div>
+
+              <!-- Tab Rankings -->
+              <div
+                class="panel-tab-body"
+                id="panel-ranking"
+                style="display: none"
+              >
+                <p class="nota-sec">Mejores clientes</p>
+                <div id="cli-ranking">
+                  <div class="vacio">
+                    <div class="vacio-icono">🏆</div>
+                    <p>Registra ventas para ver el ranking.</p>
+                  </div>
+                </div>
+                <p class="nota-sec" style="margin-top: 16px">
+                  Panes más vendidos
+                </p>
+                <div id="cli-panes-ranking">
+                  <div class="vacio">
+                    <div class="vacio-icono">🍞</div>
+                    <p>Registra ventas para ver los favoritos.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- NUEVA SECCIÓN: DESCARGAS -->
+      <section id="tab-descargas" class="seccion">
+        <!-- HEADER DE LA SECCIÓN -->
+        <div class="pag-header">
+          <h2>📥 Descargas y Reportes</h2>
+          <p>
+            Exporta tus datos contables en CSV para Excel, Google Sheets o
+            comparte con tu contador
+          </p>
+        </div>
+
+        <!-- FILTROS DE PERÍODO -->
+        <div class="card">
+          <div class="card-titulo">Período de exportación</div>
+
+          <div class="filtros">
+            <button
+              class="filtro-btn activo"
+              onclick="filtrarDescargas('hoy', this)"
+            >
+              Hoy
+            </button>
+            <button
+              class="filtro-btn"
+              onclick="filtrarDescargas('semana', this)"
+            >
+              Esta semana
+            </button>
+            <button class="filtro-btn" onclick="filtrarDescargas('mes', this)">
+              Este mes
+            </button>
+            <button class="filtro-btn" onclick="filtrarDescargas('todo', this)">
+              Todo el tiempo
+            </button>
+            <button
+              class="filtro-btn"
+              onclick="filtrarDescargas('mes-especifico', this)"
+            >
+              Mes específico
+            </button>
+          </div>
+
+          <div id="desc-mes-selector" style="display: none; margin-top: 12px">
+            <label
+              style="
+                font-size: 0.7rem;
+                font-weight: 700;
+                color: var(--cafe-rico);
+                text-transform: uppercase;
+                letter-spacing: 0.8px;
+                display: block;
+                margin-bottom: 5px;
+              "
+              >Selecciona un mes</label
+            >
+            <select
+              id="desc-mes-sel"
+              onchange="actualizarMesDescargas(this.value)"
+              style="width: 100%; max-width: 200px"
+            >
+              <option value="">Cargando meses...</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- REPORTES DISPONIBLES -->
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+          "
+        >
+          <!-- REPORTE 1: RESUMEN CONTABLE -->
+          <div class="card">
+            <div class="card-titulo">Resumen Contable</div>
+            <div class="card-subtitulo">Ganancia real vs teórica</div>
+            <p
+              style="
+                font-size: 0.82rem;
+                color: var(--texto-s);
+                margin-bottom: 10px;
+                line-height: 1.5;
+              "
+            >
+              Desglose detallado por mes. Muestra lo que realmente ganaste
+              (cobrado a clientes menos invertido en producción).
+            </p>
+            <p
+              style="
+                font-size: 0.72rem;
+                color: var(--cafe-mid);
+                margin-bottom: 12px;
+                font-weight: 600;
+              "
+            >
+              Archivo: resumen-contable-{fecha}.csv
+            </p>
+            <button class="btn btn-dorado" onclick="descargarResumenContable()">
+              Descargar
+            </button>
+          </div>
+
+          <!-- REPORTE 2: PRODUCCIÓN -->
+          <div class="card">
+            <div class="card-titulo">Historial de Producción</div>
+            <div class="card-subtitulo">Cada pan, costo y ganancia</div>
+            <p
+              style="
+                font-size: 0.82rem;
+                color: var(--texto-s);
+                margin-bottom: 10px;
+                line-height: 1.5;
+              "
+            >
+              Análisis detallado de cada producción. Identifica cuál pan te deja
+              más ganancia.
+            </p>
+            <p
+              style="
+                font-size: 0.72rem;
+                color: var(--cafe-mid);
+                margin-bottom: 12px;
+                font-weight: 600;
+              "
+            >
+              Archivo: produccion-{fecha}.csv
+            </p>
+            <button class="btn btn-dorado" onclick="descargarProduccion()">
+              Descargar
+            </button>
+          </div>
+
+          <!-- REPORTE 3: RECETAS -->
+          <div class="card">
+            <div class="card-titulo">Recetas y Costos</div>
+            <div class="card-subtitulo">Ingredientes con precios</div>
+            <p
+              style="
+                font-size: 0.82rem;
+                color: var(--texto-s);
+                margin-bottom: 10px;
+                line-height: 1.5;
+              "
+            >
+              Todas tus recetas con costo de ingredientes y margen de ganancia
+              por pan.
+            </p>
+            <p
+              style="
+                font-size: 0.72rem;
+                color: var(--cafe-mid);
+                margin-bottom: 12px;
+                font-weight: 600;
+              "
+            >
+              Archivo: recetas-{fecha}.csv
+            </p>
+            <button class="btn btn-dorado" onclick="descargarRecetas()">
+              Descargar
+            </button>
+          </div>
+
+          <!-- REPORTE 4: BODEGA -->
+          <div class="card">
+            <div class="card-titulo">Bodega e Inventario</div>
+            <div class="card-subtitulo">Ingredientes disponibles</div>
+            <p
+              style="
+                font-size: 0.82rem;
+                color: var(--texto-s);
+                margin-bottom: 10px;
+                line-height: 1.5;
+              "
+            >
+              Lista completa de ingredientes con cantidad, unidad, precio total
+              y unitario.
+            </p>
+            <p
+              style="
+                font-size: 0.72rem;
+                color: var(--cafe-mid);
+                margin-bottom: 12px;
+                font-weight: 600;
+              "
+            >
+              Archivo: bodega-{fecha}.csv
+            </p>
+            <button class="btn btn-dorado" onclick="descargarBodega()">
+              Descargar
+            </button>
+          </div>
+
+          <!-- REPORTE 5: CLIENTES -->
+          <div class="card">
+            <div class="card-titulo">Base de Clientes</div>
+            <div class="card-subtitulo">Contacto y datos</div>
+            <p
+              style="
+                font-size: 0.82rem;
+                color: var(--texto-s);
+                margin-bottom: 10px;
+                line-height: 1.5;
+              "
+            >
+              Información de clientes, total comprado y última transacción. Útil
+              para mailing.
+            </p>
+            <p
+              style="
+                font-size: 0.72rem;
+                color: var(--cafe-mid);
+                margin-bottom: 12px;
+                font-weight: 600;
+              "
+            >
+              Archivo: clientes-{fecha}.csv
+            </p>
+            <button class="btn btn-dorado" onclick="descargarClientes()">
+              Descargar
+            </button>
+          </div>
+
+          <!-- REPORTE 6: VENTAS -->
+          <div class="card">
+            <div class="card-titulo">Historial de Ventas</div>
+            <div class="card-subtitulo">Todas las transacciones</div>
+            <p
+              style="
+                font-size: 0.82rem;
+                color: var(--texto-s);
+                margin-bottom: 10px;
+                line-height: 1.5;
+              "
+            >
+              Registro completo de todas las ventas a clientes. Para impuestos y
+              reportes.
+            </p>
+            <p
+              style="
+                font-size: 0.72rem;
+                color: var(--cafe-mid);
+                margin-bottom: 12px;
+                font-weight: 600;
+              "
+            >
+              Archivo: ventas-{fecha}.csv
+            </p>
+            <button class="btn btn-dorado" onclick="descargarVentas()">
+              Descargar
+            </button>
+          </div>
+        </div>
+
+        <!-- PAQUETE COMPLETO -->
+        <div
+          class="card"
+          style="
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+            border: 2px solid #7c3aed;
+          "
+        >
+          <div class="card-titulo" style="color: white; margin-bottom: 8px">
+            ⬇️ Paquete Completo
+          </div>
+          <p
+            style="
+              font-size: 0.84rem;
+              color: rgba(255, 255, 255, 0.95);
+              margin-bottom: 14px;
+              line-height: 1.6;
+            "
+          >
+            Descarga 6 archivos CSV automáticamente. Todos los datos de tu
+            negocio en una carpeta.
+          </p>
+          <button
+            class="btn"
+            style="
+              background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+              color: white;
+              box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+            "
+            onclick="descargarTodo()"
+          >
+            ⬇️ Descargar 6 reportes
+          </button>
+        </div>
+
+        <!-- NOTA AL PIE -->
+        <div
+          style="
+            margin-top: 20px;
+            padding: 16px;
+            background: rgba(107, 83, 64, 0.08);
+            border-radius: 10px;
+            border-left: 4px solid var(--cafe-claro);
+          "
+        >
+          <p
+            style="
+              font-size: 0.76rem;
+              color: var(--texto-s);
+              line-height: 1.6;
+              margin: 0;
+            "
+          >
+            <strong>Nota:</strong> Los archivos se descargan automáticamente a
+            tu carpeta de descargas. Formato CSV compatible con Excel, Google
+            Sheets y programas contables. Los datos NO salen de tu navegador —
+            todo se procesa localmente.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <!-- ══ MODAL CONFIRMACIÓN ══ -->
+    <div class="modal-overlay" id="modal-overlay">
+      <div class="modal">
+        <div class="modal-icono" id="modal-icono">⚠️</div>
+        <div class="modal-titulo" id="modal-titulo">¿Estás seguro?</div>
+        <div class="modal-desc" id="modal-desc">
+          Esta acción no se puede deshacer.
+        </div>
+        <div class="modal-acciones">
+          <button class="btn btn-gris" onclick="cerrarModal()">Cancelar</button>
+          <button class="btn btn-eliminar" id="modal-btn-confirmar">
+            Confirmar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ MODAL EDITAR ══ -->
+    <div class="modal-overlay" id="modal-editar-overlay">
+      <div class="modal modal-grande">
+        <div class="modal-titulo" id="modal-editar-titulo">Editar</div>
+        <div id="modal-editar-body"></div>
+        <div class="modal-acciones">
+          <button class="btn btn-gris" onclick="cerrarModalEditar()">
+            Cancelar
+          </button>
+          <button class="btn btn-dorado" id="modal-editar-btn">
+            Guardar cambios
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ MODAL NUEVO CLIENTE ══ -->
+    <div class="modal-overlay" id="modal-cli-overlay">
+      <div class="modal">
+        <div class="modal-icono">👤</div>
+        <div class="modal-titulo">Nuevo cliente</div>
+        <div class="campo">
+          <label>Nombre</label>
+          <input type="text" id="cli-nom" placeholder="Nombre del cliente" />
+        </div>
+        <div class="campo">
+          <label>Tipo</label>
+          <div class="select-wrap">
+            <select id="cli-tip">
+              <option value="tienda">🏪 Tienda</option>
+              <option value="fruver">🥬 Fruver</option>
+              <option value="restaurante">🍽️ Restaurante</option>
+              <option value="cafeteria">☕ Cafetería</option>
+              <option value="ambulante">🛒 Ambulante</option>
+              <option value="panaderia">🍞 Panadería</option>
+              <option value="vecino">🏠 Vecino/Particular</option>
+              <option value="mayorista">📦 Mayorista</option>
+              <option value="otro">👤 Otro</option>
+            </select>
+          </div>
+        </div>
+        <div class="campo">
+          <label>Teléfono</label>
+          <input type="tel" id="cli-tel" placeholder="300 000 0000" />
+        </div>
+        <div class="campo">
+          <label>Dirección (opcional)</label>
+          <input type="text" id="cli-dir" placeholder="Barrio, calle..." />
+        </div>
+        <div class="modal-acciones">
+          <button class="btn btn-gris" onclick="cerrarModalNuevoCli()">
+            Cancelar
+          </button>
+          <button class="btn btn-dorado" onclick="agregarCli()">
+            + Agregar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ TOAST ══ -->
+    <div id="toast"></div>
+
+    <script type="module" src="proyecto.js"></script>
+  </body>
+</html>
