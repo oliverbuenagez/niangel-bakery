@@ -535,10 +535,11 @@ function dibujarIngs() {
 // 7. RECETAS
 // ══════════════════════════════════════════════════
 function costoRec(rec) {
-  return rec.ings.reduce((t, ri) => {
+  const ings = rec.ings.reduce((t, ri) => {
     const ing = ingredientes.find((i) => i.id === ri.ingId);
     return ing ? t + (ing.precio / ing.cantidad) * ri.cantidad : t;
   }, 0);
+  return ings + (rec.gastos || 0);
 }
 
 window.crearRec = async function () {
@@ -588,11 +589,14 @@ window.editarRec = function (id) {
         <input type="number" id="mr-rinde" value="${rec.rinde}" min="1" step="1"></div>
       <div class="campo"><label>Precio venta/pan ($)</label>
         <input type="number" id="mr-precio" value="${rec.precio || ""}" step="0.01" min="0"></div>
-    </div>`;
+    </div>
+    <div class="campo"><label>Gastos adicionales ($)</label>
+      <input type="number" id="mr-gastos" value="${rec.gastos || ""}" step="0.01" min="0"></div>`;
   abrirModalEditar(`✏️ Editar: ${rec.nombre}`, body, async () => {
     const nombre = document.getElementById("mr-nom").value.trim();
     const rinde = parseInt(document.getElementById("mr-rinde").value);
     const precio = parseFloat(document.getElementById("mr-precio").value);
+    const gastos = parseFloat(document.getElementById("mr-gastos").value);
     if (!nombre || !rinde || rinde < 1) {
       toast("Completa los campos");
       return;
@@ -601,7 +605,7 @@ window.editarRec = function (id) {
     try {
       await setDoc(
         doc(db, "recetas", id),
-        { nombre, rinde, precio: isNaN(precio) ? 0 : precio },
+        { nombre, rinde, precio: isNaN(precio) ? 0 : precio, gastos: isNaN(gastos) ? 0 : gastos },
         { merge: true },
       );
       cerrarModalEditar();
@@ -689,6 +693,23 @@ window.quitarIngRec = function (recId, ingId) {
   });
 };
 
+window.actualizarGastosRec = async function (recId) {
+  const input = document.getElementById(`gastos-input-${recId}`);
+  const gastos = parseFloat(input.value);
+  syncSync();
+  try {
+    await setDoc(
+      doc(db, "recetas", recId),
+      { gastos: isNaN(gastos) ? 0 : gastos },
+      { merge: true },
+    );
+    syncOk();
+  } catch (e) {
+    syncErr();
+    toast("Error");
+  }
+};
+
 function dibujarRecs() {
   document.getElementById("rec-cnt").textContent = recetas.length;
   const c = document.getElementById("rec-lista");
@@ -719,7 +740,19 @@ function dibujarRecs() {
           onclick="quitarIngRec('${rec.id}','${ri.ingId}')">✕</button>
       </div>`;
         })
-        .join("");
+        .join("") +
+        `<div class="ing-fila ing-fila-gastos">
+        <span class="ing-fila-nom">Gastos adicionales</span>
+        <span class="ing-fila-uni">
+          <input type="number" id="gastos-input-${rec.id}"
+            value="${rec.gastos || ""}" step="0.01" min="0"
+            placeholder="0.00"
+            style="width:80px;padding:3px 6px;border:1px solid var(--cafe-mid);
+                   border-radius:6px;font-size:.77rem;text-align:right"
+            onchange="actualizarGastosRec('${rec.id}')">
+        </span>
+        <span class="ing-fila-cost" style="color:var(--cafe-mid)">${rec.gastos ? `$${rec.gastos.toFixed(2)}` : ""}</span>
+      </div>`;
 
       const formIng = ingredientes.length
         ? `<div class="agregar-ing-rec">
@@ -843,6 +876,14 @@ window.verIngRec = function () {
     </div>`;
       })
       .join("") +
+    (rec.gastos
+      ? `<div class="item">
+      <div class="info">
+        <strong>Gastos adicionales</strong>
+        <span>$${(rec.gastos * factor).toFixed(2)}</span>
+      </div>
+    </div>`
+      : "") +
     "</div>";
 
   html += `<div class="divider"></div>
@@ -2657,6 +2698,7 @@ window.descargarRecetas = function () {
       "Rinde",
       "Precio Venta",
       "Costo Total",
+      "Gastos",
       "Costo/Pan",
       "Ganancia/Pan",
     ],
@@ -2667,16 +2709,19 @@ window.descargarRecetas = function () {
       const ing = ingredientes.find((i) => i.id === ri.ingId);
       return ing ? t + (ing.precio / ing.cantidad) * ri.cantidad : t;
     }, 0);
+    const gastos = rec.gastos || 0;
+    const costoConGastos = costo + gastos;
     const rinde = rec.rinde || 1;
     const precio = rec.precio || 0;
-    const costoPan = costo / rinde;
+    const costoPan = costoConGastos / rinde;
     const ganancia = precio - costoPan;
 
     filas.push([
       rec.nombre,
       rinde,
       precio.toFixed(2),
-      costo.toFixed(2),
+      costoConGastos.toFixed(2),
+      gastos.toFixed(2),
       costoPan.toFixed(3),
       ganancia.toFixed(2),
     ]);
